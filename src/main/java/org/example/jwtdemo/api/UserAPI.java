@@ -6,6 +6,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.example.jwtdemo.domain.entities.User;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -16,6 +17,7 @@ import java.util.List;
 public interface UserAPI {
 
   @GetMapping(value = "/me")
+  @PreAuthorize("isAuthenticated()")
   @Operation(summary = "Get the authenticated user")
   @ApiResponses(value = {
       @ApiResponse(responseCode = "200", description = "Get the authenticated user"),
@@ -26,6 +28,7 @@ public interface UserAPI {
   ResponseEntity<User> authenticatedUser();
 
   @GetMapping
+  @PreAuthorize("hasAnyRole('ADMIN', 'SUPER_ADMIN')")
   @Operation(summary = "Get all users")
   @ApiResponses(value = {
       @ApiResponse(responseCode = "200", description = "Get all users"),
